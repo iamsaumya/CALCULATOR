@@ -24,6 +24,7 @@ body{
     margin: auto;
     border: 2px solid white;
     border-radius: 2%;
+    box-shadow: 52px  52px 2rem var(--black);
 }
 
 .item{
@@ -47,4 +48,6 @@ body{
     border-radius: 0;
     margin: 2px;
     border-color: #200f21;
+    text-align: right;
+    overflow:hidden;
 }
