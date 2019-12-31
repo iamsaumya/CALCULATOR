@@ -39,6 +39,7 @@ class Stack {
 let numberStack = new Stack();
 let operatorStack = new Stack();
 let solved = false;
+let decimalison = false;
 
 let displaycontent = "";
 const allclear = document.getElementById("allclear");
@@ -61,6 +62,8 @@ minus.addEventListener("click", addToContent);
 addition.addEventListener("click", addToContent);
 percentage.addEventListener("click", addToContent);
 ans.addEventListener("click", solve);
+decimal.addEventListener("click", addDecimal);
+
 
 allclear.addEventListener("click", () => {
     displaycontent = "";
@@ -71,6 +74,16 @@ clear.addEventListener("click", () => {
     displaycontent = displaycontent.slice(0, displaycontent.length - 1);
     displayarea.innerHTML = displaycontent;
 });
+
+function addDecimal() {
+    if (!decimalison) {
+        if (isOperator(displaycontent.charAt(displaycontent.length - 1)))
+            display('0.');
+        else
+            display('.');
+        decimalison = true;
+    }
+}
 
 function precedence(op) {
     if (op == '+' || op == '-')
@@ -183,5 +196,9 @@ function addToContent(e) {
         solved = false;
     }
     let char = this.innerHTML
+
+    if (isOperator(char))
+        decimalison = false;
+
     display(char);
 }
