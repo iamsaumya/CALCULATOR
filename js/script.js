@@ -74,7 +74,7 @@ clear.addEventListener("click", () => {
 function precedence(op) {
     if (op == '+' || op == '-')
         return 1;
-    if (op == 'x' || op == '/' || op == '%')
+    if (op == '*' || op == '/' || op == '%')
         return 2;
     return 0;
 }
@@ -88,7 +88,7 @@ function applyOp(a, b, op) {
             return a + b;
         case '-':
             return a - b;
-        case 'x':
+        case '*':
             return a * b;
         case '/':
             return a / b;
@@ -97,15 +97,30 @@ function applyOp(a, b, op) {
     }
 }
 
-function isOperatorOrNumber() {
-    for (let i = 0; i < displaycontent.length; i++) {
-        if (!(displaycontent.charAt(i) == 'x' ||displaycontent.charAt(i) == '/' || displaycontent.charAt(i)== '%' || displaycontent.charAt(i)== '+' || displaycontent.charAt(i) == '-' || (parseInt(displaycontent.charAt(i), 10) >= 0 && parseInt(displaycontent.charAt(i), 10) <= 9))) {
+function isOperator(op) {
+        if (op == '*' ||op == '/' || op == '%' || op == '+' || op == '-') {
+             return true;
+        }   
+    return false;
+}
+
+function isNumber(num){
+    if(parseInt(num, 10) >= 0 && parseInt(num, 10) <= 9){
+        return true;
+    }
+    return false;
+}
+
+function isOperatorOrNumber(){
+    for(let i = 0;i<displaycontent.length ;i++){
+        if(!(isOperator(displaycontent.charAt(i)) || isNumber(displaycontent.charAt(i)))){
             displaycontent = "";
             displayarea.innerHTML = displaycontent;
             break;
         }
     }
 }
+
 
 function solve() {
     isOperatorOrNumber();
@@ -164,6 +179,10 @@ function solve() {
 
 function display(value) {
     isOperatorOrNumber();
+    if (isOperator(displaycontent.slice(-1)) && isOperator(value)){
+            displaycontent = displaycontent.slice(0,displaycontent.length-1);
+    };
+    
     displaycontent = displaycontent + value;
     if (displaycontent.length > 26) {
         window.alert("You have exceeded the size of input.");
@@ -173,6 +192,6 @@ function display(value) {
 }
 
 function addToContent(e) {
-    let char = this.innerHTML;
+    let char = this.innerHTML
     display(char);
 }
