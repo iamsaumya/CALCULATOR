@@ -10,7 +10,7 @@ class Stack {
 
     pop() {
         if (this.item.length == 0) {
-            return "Underflow";
+            return "Operands Underflow!";
         }
 
         return this.item.pop();
@@ -80,6 +80,9 @@ function precedence(op) {
 }
 
 function applyOp(a, b, op) {
+    if(a==="Operands Underflow!"){
+        return a;
+    }
     switch (op) {
         case '+':
             return a + b;
@@ -94,16 +97,18 @@ function applyOp(a, b, op) {
     }
 }
 
-
-function clearscreen() {
-    if (displaycontent === "undefined" || displaycontent === "NaN" || displaycontent==="Infinity") {
-        displaycontent = "";
-        displayarea.innerHTML = displaycontent;
+function isOperatorOrNumber() {
+    for (let i = 0; i < displaycontent.length; i++) {
+        if (!(displaycontent.charAt(i) == 'x' ||displaycontent.charAt(i) == '/' || displaycontent.charAt(i)== '%' || displaycontent.charAt(i)== '+' || displaycontent.charAt(i) == '-' || (parseInt(displaycontent.charAt(i), 10) >= 0 && parseInt(displaycontent.charAt(i), 10) <= 9))) {
+            displaycontent = "";
+            displayarea.innerHTML = displaycontent;
+            break;
+        }
     }
 }
 
 function solve() {
-    clearscreen();
+    isOperatorOrNumber();
     for (let i = 0; i < displaycontent.length; i++) {
         if (!isNaN(parseInt(displaycontent.charAt(i), 10))) {
             let val = 0;
@@ -148,6 +153,7 @@ function solve() {
         let a = numberStack.pop();
         let op = operatorStack.pop();
         let answer = applyOp(a, b, op);
+        console.log(answer);
         numberStack.push(answer);
     }
 
@@ -157,7 +163,7 @@ function solve() {
 
 
 function display(value) {
-    clearscreen();
+    isOperatorOrNumber();
     displaycontent = displaycontent + value;
     if (displaycontent.length > 26) {
         window.alert("You have exceeded the size of input.");
