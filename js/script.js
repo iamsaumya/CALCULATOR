@@ -43,17 +43,17 @@ let decimalison = false;
 
 let displaycontent = "";
 const allclear = document.getElementById("allclear");
-const clear = document.getElementById("clear");
-const percentage = document.getElementById("percentage");
-const divide = document.getElementById("divide");
+const clear = document.getElementById("8");
+const percentage = document.getElementById("53");
+const divide = document.getElementById("111");
 const numbers = document.querySelectorAll(".numbers");
 const displayarea = document.getElementById("displayarea");
-const multiply = document.querySelector("#multiply");
-const minus = document.querySelector("#minus");
-const addition = document.querySelector("#addition");
+const multiply = document.getElementById("106");
+const minus = document.getElementById("109");
+const addition = document.getElementById("107");
 const signchange = document.querySelector("#signchange");
-const decimal = document.querySelector("#decimal");
-const ans = document.querySelector("#ans");
+const decimal = document.getElementById("110");
+const ans = document.getElementById("13");
 
 numbers.forEach(number => number.addEventListener("click", addToContent));
 multiply.addEventListener("click", addToContent);
@@ -63,17 +63,33 @@ addition.addEventListener("click", addToContent);
 percentage.addEventListener("click", addToContent);
 ans.addEventListener("click", solve);
 decimal.addEventListener("click", addDecimal);
+clear.addEventListener("click", clearlastchar);
 
+
+window.addEventListener("keydown", function (e) {
+    const keycode = e.keyCode;
+    const key = document.getElementById(`${e.keyCode}`);
+    if (keycode == 13) {
+        solve(e);
+    } else if (keycode == 110) {
+        addDecimal(e);
+    } else if (keycode == 8) {
+        clearlastchar(e);
+    } else {
+        addToContent(e);
+    }
+});
 
 allclear.addEventListener("click", () => {
     displaycontent = "";
     displayarea.innerHTML = displaycontent;
 });
 
-clear.addEventListener("click", () => {
+
+function clearlastchar(e) {
     displaycontent = displaycontent.slice(0, displaycontent.length - 1);
     displayarea.innerHTML = displaycontent;
-});
+}
 
 function addDecimal() {
     if (!decimalison) {
@@ -125,7 +141,7 @@ function isNumber(num) {
     return false;
 }
 
-function solve() {
+function solve(e) {
     for (let i = 0; i < displaycontent.length; i++) {
         if (!isNaN(parseInt(displaycontent.charAt(i), 10))) {
             let val = 0;
@@ -195,8 +211,12 @@ function addToContent(e) {
         displayarea.innerHTML = displaycontent;
         solved = false;
     }
-    let char = this.innerHTML
-
+    let char;
+    console.log(e);
+    if (e.type == "keydown")
+        char = e.key;
+    else
+        char = e.target.textContent;
     if (isOperator(char))
         decimalison = false;
 
