@@ -59,7 +59,6 @@ divide.addEventListener("click", addToContent);
 minus.addEventListener("click", addToContent);
 addition.addEventListener("click", addToContent);
 percentage.addEventListener("click", addToContent);
-
 ans.addEventListener("click", solve);
 
 allclear.addEventListener("click", () => {
@@ -75,7 +74,7 @@ clear.addEventListener("click", () => {
 function precedence(op) {
     if (op == '+' || op == '-')
         return 1;
-    if (op == '*' || op == '/' || op == '%')
+    if (op == 'x' || op == '/' || op == '%')
         return 2;
     return 0;
 }
@@ -86,7 +85,7 @@ function applyOp(a, b, op) {
             return a + b;
         case '-':
             return a - b;
-        case '*':
+        case 'x':
             return a * b;
         case '/':
             return a / b;
@@ -96,26 +95,32 @@ function applyOp(a, b, op) {
 }
 
 
+function clearscreen() {
+    if (displaycontent === "undefined" || displaycontent === "NaN" || displaycontent==="Infinity") {
+        displaycontent = "";
+        displayarea.innerHTML = displaycontent;
+    }
+}
 
 function solve() {
+    clearscreen();
     for (let i = 0; i < displaycontent.length; i++) {
-        if (!isNaN(parseInt(displaycontent.charAt(i),10))) {
+        if (!isNaN(parseInt(displaycontent.charAt(i), 10))) {
             let val = 0;
             let singleDigit = true;
             let foundDecimal = false;
             let multiplier = 1;
             let negative = false;
-            
-            while (i < displaycontent.length && (!isNaN(parseInt(displaycontent.charAt(i),10)) || (displaycontent.charAt(i) == '.') || (displaycontent.charAt(i)=='-'))) {
-                if (displaycontent.charAt(i)=='-'){
+
+            while (i < displaycontent.length && (!isNaN(parseInt(displaycontent.charAt(i), 10)) || (displaycontent.charAt(i) == '.') || (displaycontent.charAt(i) == '-'))) {
+                if (displaycontent.charAt(i) == '-') {
                     negative = true;
-                }
-                else if (displaycontent.charAt(i) == '.') {
+                } else if (displaycontent.charAt(i) == '.') {
                     foundDecimal = true;
                 } else {
-                    val = (val * 10) + parseInt(displaycontent.charAt(i),10);
+                    val = (val * 10) + parseInt(displaycontent.charAt(i), 10);
                     singleDigit = false;
-                    if(foundDecimal) multiplier = multiplier * 10;
+                    if (foundDecimal) multiplier = multiplier * 10;
                 }
                 i++;
             }
@@ -123,8 +128,8 @@ function solve() {
                 i--;
             }
             console.log(multiplier);
-            val = val/multiplier;
-            if(negative) val = val * -1 ;
+            val = val / multiplier;
+            if (negative) val = val * -1;
             numberStack.push(val);
         } else {
             while (!operatorStack.isEmpty() && precedence(operatorStack.peek()) >= precedence(displaycontent.charAt(i))) {
@@ -152,6 +157,7 @@ function solve() {
 
 
 function display(value) {
+    clearscreen();
     displaycontent = displaycontent + value;
     if (displaycontent.length > 26) {
         window.alert("You have exceeded the size of input.");
